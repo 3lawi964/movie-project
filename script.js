@@ -21,6 +21,7 @@ const autorun = async () => {
   renderMovies(movies.results);
 };
 
+
 // Don't touch this function please
 const constructUrl = (path) => {
   return `${TMDB_BASE_URL}/${path}?api_key=${atob(
@@ -43,13 +44,6 @@ const fetchMovies = async () => {
   return res.json();
 };
 
-/* Need to add 
-// 1) Get Top Rated        movie/top_rated
-// 2) Get Popular          movie/popular
-// 3) Get Upcoming         movie/upcoming
-// 4) Get Release Dates    movie/{movie_id}/release_dates
-// 5) Get Genre
-*/
 
 // Don't touch this function please. This function is to fetch one movie.
 const fetchMovie = async (movieId) => {
@@ -115,7 +109,21 @@ const renderMovies = (movies) => {
         genre.push("History");
       } else if (eachMovieGenreId === 10752) {
         genre.push("War");
-      }
+      }else if (eachMovieGenreId === 35) {
+        genre.push("Comedy");
+      } else if (eachMovieGenreId === 99) {
+        genre.push("Documentary");
+      } else if (eachMovieGenreId === 10751) {
+        genre.push("Family");
+      } else if (eachMovieGenreId === 10402) {
+        genre.push("Music");
+      } else if (eachMovieGenreId === 10749) {
+        genre.push("Romance");
+      } else if (eachMovieGenreId === 10770) {
+        genre.push("Tv Movie");
+      } else if (eachMovieGenreId === 37) {
+        genre.push("Western");
+      }       
       return genre;
     });
 
@@ -204,15 +212,8 @@ const renderMovie = (movie, credits, similarMovies) => {
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen></iframe>
 
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/mkomfZHG5q4" title="YouTube video player" 
-        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen></iframe>
-        </div> 
-
         <div class="pt-20">
-        <p id="director-name"> <b>Director's Name</b>  ${
-          credits.crew[15].name
-        } </p>
+        <p id="director-name"> <b>Director's Name</b> ?? </p>
         </div>
 
         <div class="pt-20">
@@ -259,14 +260,62 @@ const rendermoviesBasedOnGenres = (movies) => {
       "lg:px-20"
     );
     movieDiv.setAttribute("id", "movieCard");
-    movieDiv.innerHTML = `
-        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
-      movie.title
-    } poster">
-        <h3>${movie.title}</h3>`;
-    movieDiv.addEventListener("click", () => {
-      movieDetails(movie);
+    //To Create genres' name for each movie based on genre_ids
+    const movieGenreIdArray = movie.genre_ids;
+    const genre = [];
+    movieGenreIdArray.map((eachMovieGenreId) => {
+      if (eachMovieGenreId === 27) {
+        genre.push("Horror");
+      } else if (eachMovieGenreId === 53) {
+        genre.push("Thriller");
+      } else if (eachMovieGenreId === 28) {
+        genre.push("Action");
+      } else if (eachMovieGenreId === 14) {
+        genre.push("Fantasy");
+      } else if (eachMovieGenreId === 878) {
+        genre.push("Science Fiction");
+      } else if (eachMovieGenreId === 9648) {
+        genre.push("Mystery");
+      } else if (eachMovieGenreId === 18) {
+        genre.push("Drama");
+      } else if (eachMovieGenreId === 12) {
+        genre.push("Adventure");
+      } else if (eachMovieGenreId === 80) {
+        genre.push("Crime");
+      } else if (eachMovieGenreId === 16) {
+        genre.push("Animation");
+      } else if (eachMovieGenreId === 36) {
+        genre.push("History");
+      } else if (eachMovieGenreId === 10752) {
+        genre.push("War"); 
+      }else if (eachMovieGenreId === 35) {
+        genre.push("Comedy");
+      } else if (eachMovieGenreId === 99) {
+        genre.push("Documentary");
+      } else if (eachMovieGenreId === 10751) {
+        genre.push("Family");
+      } else if (eachMovieGenreId === 10402) {
+        genre.push("Music");
+      } else if (eachMovieGenreId === 10749) {
+        genre.push("Romance");
+      } else if (eachMovieGenreId === 10770) {
+        genre.push("Tv Movie");
+      } else if (eachMovieGenreId === 37) {
+        genre.push("Western");
+      }       
+      return genre;
     });
+
+  
+    movieDiv.innerHTML = `
+            <div class="image-container relative w-full border-8 border-black">
+                <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${movie.title} poster class="home-movie-image opacity-100 block w-full h-auto transition ease-in duration-500">
+                <div class="middle transition ease-in duration-500 opacity-0 absolute -translate-y-2/4 -translate-x-2/4 text-justify w-72">
+                    <div class="textonimage bg-black text-white text-xs w-full p-3"><b>Rating:</b> ${movie.vote_average} <br><b>Genres:</b> ${genre}  <br><b>Description:</b> ${movie.overview}</div>
+                </div>
+              </div>
+              <h1 class= "text-center md:text-4xl text-2xl font-bold font-mono bg-black text-white h-20 md:h-28 lg:h-36 xl:h-28 m-auto p-3">${movie.title}</h1>`;
+    
     movieDiv.addEventListener("click", () => {
       movieDetails(movie);
     });
@@ -478,6 +527,123 @@ const renderUpComing = (movies) => {
     mainContainer.appendChild(CONTAINER);
   });
 };
+
+
+//Fetching Actors and Single Actors //
+
+const autorun2 = async () => {
+  const actors = await fetchActors(); // added new for actors
+  renderActors(actors.results); // added new for actors
+};
+
+// Actor Details Function
+const actorDetails = async (actor) => {
+  const actorRes = await fetchActor(actor.id);
+  const movieCredits = await fetchMovieCredits(actor.id)
+  renderActor(actorRes, movieCredits);
+};
+
+// fetch Actors Function
+const fetchActors = async () => {
+  const url2 = constructUrl(`person/popular`);
+  const res = await fetch(url2);
+  return res.json();
+}; 
+
+//fetch Movie Credits Function for each Actor
+const fetchMovieCredits = async (actorId) => {
+  const url2 = constructUrl(`person/${actorId}/movie_credits`);
+  const res = await fetch(url2);
+  return res.json();
+};  
+
+//fetch Single Actor Function
+const fetchActor = async (actorId) => {
+  const url2 = constructUrl(`person/${actorId}`);
+  const res = await fetch(url2);
+  return res.json();
+};
+
+// renderActors Function
+const renderActors = (actors) => {
+
+ deletingContainerContent()
+ const newDiv2 = document.createElement('div')
+ newDiv2.classList.add("grid","grid-cols-1","gap-6","md:grid-cols-2","lg:grid-cols-3","lg:px-20")
+ actors.map( (actor) => {
+
+     const actorDiv = document.createElement("div");
+     actorDiv.classList.add('actorContainer')
+     actorDiv.innerHTML = `
+      <div class= "w-80 mx-auto">
+        <div class="image-container relative w-full border-8 border-black">
+          <img src="${PROFILE_BASE_URL  + actor.profile_path}" alt="${actor.name}" poster class=" home-actor-image opacity-100 block w-full h-auto">  
+        </div>
+        <h1 class= "text-center text-2xl md:text-3xl font-bold font-mono bg-black text-white h-20 md:h-28 lg:h-36 xl:h-28 m-auto p-3">${actor.name}</h1>
+     </div> `
+     actorDiv.addEventListener("click", () => {
+       actorDetails(actor);
+     });
+
+  newDiv2.appendChild(actorDiv)
+  CONTAINER.appendChild(newDiv2);
+ });
+};
+
+//render Single Actor Function
+const renderActor = (actor, movieCredits) => {
+//console.log(actor, movieCredits)
+
+CONTAINER.innerHTML = `
+<div class="row bg-white text-black mx-auto w-full">
+   <div class="col-md-4">
+        <img id="actor-backdrop" src=${PROFILE_BASE_URL + actor.profile_path}>
+   </div>
+
+   <div class="col-md-8 bg-white text-black w-full">
+       <h2 id="actor-name"><b>Name:</b> ${actor.name}</h2>
+       <p id="actor-gender"><b>Gender:</b> ${actor.gender}</p>
+       <p id="actor-popularity"><b>Popularity:</b> ${actor.popularity} </p>
+       <p id="actor-birthday"><b>Birthday:</b> ${actor.birthday} </p>
+       <p id="actor-deathday"><b>Deathday:</b> ${actor.deathday} </p>
+       <h3 class="pt-6"><b>Biography:</b></h3>
+       <p id="actor-biography">${actor.biography}</p>
+   </div>
+   
+   <h3>List of Movies the Actor Participated in:</h3>
+   <ul id="list-of-movies-actor-participated-in" class="list-unstyled" >
+        <li> 
+           <a href="#"> ${movieCredits.cast[0].title}</a>
+        </li>
+           
+        <li> 
+           <a href="#"> ${movieCredits.cast[1].title}</a>
+        </li>
+           
+        <li> 
+           <a href="#"> ${movieCredits.cast[2].title} </a>
+        </li>
+           
+        <li> 
+           <a href="#">${movieCredits.cast[3].title} </a>
+        </li>
+           
+        <li> 
+           <a href="#"> ${movieCredits.cast[4].title}</a>
+        </li>
+
+        <li> 
+           <a href="#"> ${movieCredits.cast[5].title}</a>
+        </li>
+
+        <li> 
+          <a href="#"> ${movieCredits.cast[6].title}</a>
+         </li>
+    </ul> 
+</div>`;
+};  
+
+
 //! ends here
 document.addEventListener("DOMContentLoaded", autorun);
 document.getElementById("top").addEventListener("click", topRated);
@@ -485,3 +651,5 @@ document.getElementById("popular").addEventListener("click", mostPopular);
 document.getElementById("latest").addEventListener("click", latestMovies);
 document.getElementById("nowPlaying").addEventListener("click", autorun);
 document.getElementById("upComing").addEventListener("click", upComingMovies);
+document.getElementById("actors").addEventListener("click", autorun2 );
+
