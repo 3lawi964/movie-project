@@ -9,6 +9,11 @@ const selectedGenras = [];
 const mainContainer = document.querySelector(".mainContainer");
 mainContainer.appendChild(CONTAINER);
 
+const deletingContainerContent = () => {
+  while (CONTAINER.firstChild) {
+    CONTAINER.firstChild.remove();
+  }
+};
 // Don't touch this function please
 const autorun = async () => {
   const movies = await fetchMovies();
@@ -71,6 +76,7 @@ const fetchSimilarMovies = async (movieId) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovies = (movies) => {
+  deletingContainerContent();
   const newDiv = document.createElement("div");
   newDiv.classList.add(
     "grid",
@@ -194,7 +200,7 @@ const renderMovie = (movie, credits, similarMovies) => {
             </div>
             
         
-        <div class="movie-trailer pt-10 w-full text-center mx-auto">
+         <div class="movie-trailer pt-10 w-full text-center mx-auto">
         <iframe width="560" height="315" src="https://www.youtube.com/embed/d4m9WCxb-J8" title="YouTube video player" 
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen></iframe>
@@ -202,7 +208,7 @@ const renderMovie = (movie, credits, similarMovies) => {
         <iframe width="560" height="315" src="https://www.youtube.com/embed/mkomfZHG5q4" title="YouTube video player" 
         frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
         allowfullscreen></iframe>
-        </div>
+        </div> 
 
         <div class="pt-20">
         <p id="director-name"> <b>Director's Name</b>  ${
@@ -240,11 +246,10 @@ const getFilterdMoviesByGenres = async () => {
   const genres = await fetchGenresFilterd();
   rendermoviesBasedOnGenres(genres.results);
 };
+
 const rendermoviesBasedOnGenres = (movies) => {
-  while (CONTAINER.firstChild) {
-    CONTAINER.firstChild.remove();
-  }
-  movies.map((movie) => {
+  deletingContainerContent();
+  movies.forEach((movie) => {
     const movieDiv = document.createElement("div");
     CONTAINER.classList.add(
       "grid",
@@ -260,6 +265,9 @@ const rendermoviesBasedOnGenres = (movies) => {
       movie.title
     } poster">
         <h3>${movie.title}</h3>`;
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
     movieDiv.addEventListener("click", () => {
       movieDetails(movie);
     });
@@ -304,4 +312,177 @@ const renderGenres = (genre) => {
   });
 };
 
+//! fetch the top rated movies
+
+const fetchTopRated = async () => {
+  const url = constructUrl(`movie/top_rated`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const topRated = async () => {
+  const movieRes = await fetchTopRated();
+  renderTopRate(movieRes.results);
+};
+const renderTopRate = (movies) => {
+  console.log(movies);
+  deletingContainerContent();
+  movies.forEach((movie) => {
+    const movieDiv = document.createElement("div");
+    CONTAINER.classList.add(
+      "grid",
+      "grid-cols-1",
+      "gap-6",
+      "md:grid-cols-2",
+      "lg:grid-cols-3",
+      "lg:px-20"
+    );
+    movieDiv.setAttribute("id", "movieCard");
+    movieDiv.innerHTML = `
+        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
+      movie.title
+    } poster">
+        <h3>${movie.title}</h3>`;
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    CONTAINER.appendChild(movieDiv);
+    mainContainer.appendChild(CONTAINER);
+  });
+};
+//! ends here
+//! fetch most popular
+const fetchPopular = async () => {
+  const url = constructUrl(`movie/popular`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const mostPopular = async () => {
+  const movieRes = await fetchPopular();
+  renderPopular(movieRes.results);
+};
+const renderPopular = (movies) => {
+  deletingContainerContent();
+  movies.forEach((movie) => {
+    const movieDiv = document.createElement("div");
+    CONTAINER.classList.add(
+      "grid",
+      "grid-cols-1",
+      "gap-6",
+      "md:grid-cols-2",
+      "lg:grid-cols-3",
+      "lg:px-20"
+    );
+    movieDiv.setAttribute("id", "movieCard");
+    movieDiv.innerHTML = `
+        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
+      movie.title
+    } poster">
+        <h3>${movie.title}</h3>`;
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    CONTAINER.appendChild(movieDiv);
+    mainContainer.appendChild(CONTAINER);
+  });
+};
+//! ends here
+//! fetch latest movies
+
+const fetchLatest = async () => {
+  const date = new Date();
+  const currentDate =
+    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+  const release = `&primary_release_date.gte=1992-01-01&primary_release_date.lte=${currentDate}`;
+  const url = constructUrl(`discover/movie`) + release;
+  const res = await fetch(url);
+  return res.json();
+};
+
+const latestMovies = async () => {
+  const movieRes = await fetchLatest();
+  console.log(movieRes.results);
+  renderLatest(movieRes.results);
+};
+const renderLatest = (movies) => {
+  deletingContainerContent();
+  movies.forEach((movie) => {
+    const movieDiv = document.createElement("div");
+    CONTAINER.classList.add(
+      "grid",
+      "grid-cols-1",
+      "gap-6",
+      "md:grid-cols-2",
+      "lg:grid-cols-3",
+      "lg:px-20"
+    );
+    movieDiv.setAttribute("id", "movieCard");
+    movieDiv.innerHTML = `
+        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
+      movie.title
+    } poster">
+        <h3>${movie.title}</h3>`;
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    CONTAINER.appendChild(movieDiv);
+    mainContainer.appendChild(CONTAINER);
+  });
+};
+//! ends here
+//! fetch upcoming
+const fetchUpComing = async () => {
+  const url = constructUrl(`movie/upcoming`);
+  const res = await fetch(url);
+  return res.json();
+};
+
+const upComingMovies = async () => {
+  const movieRes = await fetchUpComing();
+  renderUpComing(movieRes.results);
+};
+const renderUpComing = (movies) => {
+  deletingContainerContent();
+  movies.forEach((movie) => {
+    const movieDiv = document.createElement("div");
+    CONTAINER.classList.add(
+      "grid",
+      "grid-cols-1",
+      "gap-6",
+      "md:grid-cols-2",
+      "lg:grid-cols-3",
+      "lg:px-20"
+    );
+    movieDiv.setAttribute("id", "movieCard");
+    movieDiv.innerHTML = `
+        <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
+      movie.title
+    } poster">
+        <h3>${movie.title}</h3>`;
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    movieDiv.addEventListener("click", () => {
+      movieDetails(movie);
+    });
+    CONTAINER.appendChild(movieDiv);
+    mainContainer.appendChild(CONTAINER);
+  });
+};
+//! ends here
 document.addEventListener("DOMContentLoaded", autorun);
+document.getElementById("top").addEventListener("click", topRated);
+document.getElementById("popular").addEventListener("click", mostPopular);
+document.getElementById("latest").addEventListener("click", latestMovies);
+document.getElementById("nowPlaying").addEventListener("click", autorun);
+document.getElementById("upComing").addEventListener("click", upComingMovies);
