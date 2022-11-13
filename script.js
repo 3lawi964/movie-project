@@ -86,7 +86,7 @@ const renderMovies = (movies) => {
     "lg:grid-cols-3",
     "lg:px-20"
   );
-  movies.map((movie) => {
+  movies.forEach((movie) => {
     //To Create genres' name for each movie based on genre_ids
     const movieGenreIdArray = movie.genre_ids;
     const genre = [];
@@ -142,7 +142,6 @@ const renderMovies = (movies) => {
     });
     newDiv.appendChild(movieDiv);
     CONTAINER.appendChild(newDiv);
-    mainContainer.appendChild(CONTAINER);
   });
 };
 
