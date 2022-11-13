@@ -77,7 +77,7 @@
                   data-dropdown-toggle="dropdownNavbar"
                   class="text-gray-700 hover:hover:text-white md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-white md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
                 >
-                  Movies
+                  Genres
                   <svg
                     class="w-4 h-4 ml-1"
                     fill="currentColor"
@@ -94,13 +94,77 @@
                 <!-- Dropdown menu -->
                 <div
                   id="dropdownNavbar"
-                  class="hidden bg-gray-800 text-base z-10 list-none divide-y divide-gray-100 rounded shadow my-4 w-44"
+                  class="hidden bg-gray-800 text-base z-10 list-none divide-y divide-gray-100 rounded shadow-lg w-44"
                 >
                   <ul
-                    class="py-1"
+                    class="cursor-pointer"
                     aria-labelledby="dropdownLargeButton"
                     id="genreList"
                   ></ul>
+                </div>
+              </li>
+              <li>
+                <button
+                  id="dropdownNavbarLinkMovies"
+                  data-dropdown-toggle="dropdownNavbarMovies"
+                  class="text-gray-700 hover:hover:text-white md:hover:bg-transparent md:border-0 pl-3 pr-4 py-2 md:hover:text-white md:p-0 font-medium flex items-center justify-between w-full md:w-auto"
+                >
+                  Movies
+                  <svg
+                    class="w-4 h-4 ml-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
+                <!-- Dropdown menu -->
+                <!-- movies -->
+                <div
+                  id="dropdownNavbarMovies"
+                  class="hidden bg-gray-800 text-base z-10 list-none divide-y divide-gray-100 rounded shadow w-44"
+                >
+                  <ul
+                    aria-labelledby="dropdownLargeButton"
+                    id="movies"
+                    class="cursor-pointer"
+                  >
+                    <li
+                      class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                      id="top"
+                    >
+                      Top Rated
+                    </li>
+                    <li
+                      class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                      id="popular"
+                    >
+                      Popular
+                    </li>
+                    <li
+                      class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                      id="latest"
+                    >
+                      Latest
+                    </li>
+                    <li
+                      class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                      id="nowPlaying"
+                    >
+                      Now Playing
+                    </li>
+                    <li
+                      class="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2"
+                      id="upComing"
+                    >
+                      <p>Up Coming</p>
+                    </li>
+                  </ul>
                 </div>
               </li>
               <li>
@@ -161,13 +225,6 @@
                   </button>
                 </form>
               </li>
-              <!-- <li>
-                <a
-                  href="#"
-                  class="text-gray-700 hover:bg-gray-50 border-b border-gray-100 md:hover:bg-transparent md:border-0 block pl-3 pr-4 py-2 md:hover:text-blue-700 md:p-0"
-                  >Contact</a
-                >
-              </li> -->
             </ul>
           </div>
         </div>
