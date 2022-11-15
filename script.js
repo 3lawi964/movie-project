@@ -12,6 +12,7 @@ const date = new Date();
 const currentDate =
   date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 const release = `&primary_release_date.gte=1992-01-01&primary_release_date.lte=${currentDate}`;
+const youtubeBaseUrl = `https://www.youtube.com/embed/`;
 
 const deletingContainerContent = () => {
   while (CONTAINER.firstChild) {
@@ -130,57 +131,72 @@ const renderMovies = (movies) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovie = (movie, credits, similarMovies) => {
-  console.log(similarMovies)
-
   //To get the Director's Name
-  const name = []
+  const name = [];
 
-  const names = credits.crew.map(eachCrewObject => {
-       if(eachCrewObject.known_for_department === "Directing"){
-           name.push(eachCrewObject.name) 
-          }   
-      return name     
-  })
-  
-  const directorsname = name[0]
+  const names = credits.crew.map((eachCrewObject) => {
+    if (eachCrewObject.known_for_department === "Directing") {
+      name.push(eachCrewObject.name);
+    }
+    return name;
+  });
+
+  const directorsname = name[0];
 
   //To get the movie's Genres
 
-  let movieGenres = movie.genres
-  const movieArrayGenre = []
+  let movieGenres = movie.genres;
+  const movieArrayGenre = [];
 
-  movieGenres.map( eachGenreElement =>{
-      movieArrayGenre.push(eachGenreElement.id)
-  })
+  movieGenres.map((eachGenreElement) => {
+    movieArrayGenre.push(eachGenreElement.id);
+  });
 
+  //To Get similar Movies
+  // if Similar Movies genres include MovieArrayGenre then need the title and image
+  const similarMovResults = similarMovies.results;
 
-  //To Get similar Movies 
-  // if Similar Movies genres include MovieArrayGenre then need the title and image 
-  const similarMovResults = similarMovies.results
-  
-  console.log(similarMovResults)
-
-CONTAINER.innerHTML = `
-      <h1 class="text-center text-4xl pt-3 pb-8" id="movie-title"><b>${movie.title}</b></h1>
+  trailersList(movie.id);
+  CONTAINER.innerHTML = `<div class="relative">
+      
+      <h1 class="text-center text-4xl pt-3 pb-8" id="movie-title"><b>${
+        movie.title
+      }</b></h1>
       <div class="grid grid-cols-3 lg:flex bg-white text-black mx-auto w-full">
          <div class="col-md-4">
-           <img id="movie-backdrop" src=${BACKDROP_BASE_URL + movie.backdrop_path}>
+           <img id="movie-backdrop" src=${
+             BACKDROP_BASE_URL + movie.poster_path
+           } class="rounded-xl">
           </div>
 
-          <div class=" bg-white text-black w-full px-3">
-            <p id="movie-release-date"><b>Release Date:</b> ${movie.release_date}</p>
+          <div class=" bg-white text-black w-full px-3 ">
+            
+            <p id="movie-release-date"><b>Release Date:</b> ${
+              movie.release_date
+            }</p>
             <p id="movie-runtime"><b>Runtime:</b> ${movie.runtime} Minutes</p>
-            <p id="movie-language"><b>Movie's Language:</b> ${movie.original_language}</p>
-            <p id="movie-rating"> <b>Movie Ratings </b>  ${movie.vote_average} </p>
-            <p id="recieved-votes"> <b> Recieved Votes: </b> ${movie.vote_count} votes</p>
+            <p id="movie-language"><b>Movie's Language:</b> ${
+              movie.original_language
+            }</p>
+            <p id="movie-rating"> <b>Movie Ratings </b>  ${parseFloat(
+              movie.vote_average
+            ).toFixed(1)} </p>
+            <p id="recieved-votes"> <b> Recieved Votes: </b> ${
+              movie.vote_count
+            } votes</p>
             <p id="director-name"> <b>Director's Name</b> ${directorsname} </p>
             <h3 class="pt-6"><b>Overview:</b></h3>
             <p id="movie-overview">${movie.overview}</p>
+            
           </div>
           
           <div class=" w-full px-3">
-              <p id="production-company"><b>Production Company:</b> ${movie.production_companies[0].name}</p>
-              <img class="w-52 h-auto pt-2"id="production-company-logo" src=${BACKDROP_BASE_URL + movie.production_companies[0].logo_path}> 
+              <p id="production-company"><b>Production Company:</b> ${
+                movie.production_companies[0].name
+              }</p>
+              <img class="w-52 h-auto pt-2"id="production-company-logo" src=${
+                BACKDROP_BASE_URL + movie.production_companies[0].logo_path
+              }> 
               <h3 class="pt-3"><b>5 Main Actors:</b></h3>
               <ul class=" pt-2 list-unstyled">
                   <li><a href="/">* ${credits.cast[0].name} </a></li>
@@ -192,46 +208,92 @@ CONTAINER.innerHTML = `
           </div>
 
       </div>    
-
+    </div>
 
       <div id="Related-Movies-Section class="text-center mx-auto px-3">
       <h3 class="py-6 px-3 text-2xl"><b>Related Movies:</b></h3>
           <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-3 mx-auto">
              <div class="w-52">
-                  <img src=${BACKDROP_BASE_URL + similarMovResults[0].backdrop_path}>
-                  <p class="pt-2 text-center"><b>${similarMovResults[0].title}</b></p>
+                  <img src=${
+                    BACKDROP_BASE_URL + similarMovResults[0].backdrop_path
+                  }>
+                  <p class="pt-2 text-center"><b>${
+                    similarMovResults[0].title
+                  }</b></p>
              </div>
              <div class="w-52">
-                  <img src=${BACKDROP_BASE_URL + similarMovResults[1].backdrop_path}>
-                  <p class="pt-2 text-center"><b>${similarMovResults[1].title}</b></p>
+                  <img src=${
+                    BACKDROP_BASE_URL + similarMovResults[1].backdrop_path
+                  }>
+                  <p class="pt-2 text-center"><b>${
+                    similarMovResults[1].title
+                  }</b></p>
              </div>
              <div class="w-52">
-                  <img src=${BACKDROP_BASE_URL + similarMovResults[2].backdrop_path}>
-                  <p class="pt-2 text-center"><b>${similarMovResults[2].title}</b></p>
+                  <img src=${
+                    BACKDROP_BASE_URL + similarMovResults[2].backdrop_path
+                  }>
+                  <p class="pt-2 text-center"><b>${
+                    similarMovResults[2].title
+                  }</b></p>
              </div>
              <div class="w-52">
-                  <img src=${BACKDROP_BASE_URL + similarMovResults[3].backdrop_path}>
-                  <p class="pt-2 text-center"><b>${similarMovResults[3].title}</b></p>
+                  <img src=${
+                    BACKDROP_BASE_URL + similarMovResults[3].backdrop_path
+                  }>
+                  <p class="pt-2 text-center"><b>${
+                    similarMovResults[3].title
+                  }</b></p>
              </div>
              <div class="w-52">
-                  <img src=${BACKDROP_BASE_URL + similarMovResults[4].backdrop_path}>
-                  <p class="pt-2 text-center"><b>${similarMovResults[4].title}</b></p>
+                  <img src=${
+                    BACKDROP_BASE_URL + similarMovResults[4].backdrop_path
+                  }>
+                  <p class="pt-2 text-center"><b>${
+                    similarMovResults[4].title
+                  }</b></p>
              </div>
              <div class="w-52">
-                  <img src=${BACKDROP_BASE_URL + similarMovResults[5].backdrop_path}>
-                  <p class="pt-2 text-center"><b>${similarMovResults[5].title}</b></p>
+                  <img src=${
+                    BACKDROP_BASE_URL + similarMovResults[5].backdrop_path
+                  }>
+                  <p class="pt-2 text-center"><b>${
+                    similarMovResults[5].title
+                  }</b></p>
              </div>
          </div>
       </div>
           
-      <div class="movie-trailer pt-10 w-full text-center mx-auto">
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/d4m9WCxb-J8" title="YouTube video player" 
-      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-      allowfullscreen></iframe>
+      <div class="movie-trailer pt-10 w-full text-center mx-auto" id="trailer${
+        movie.id
+      }">
+      
       </div>
 
   `;
 };
+
+//! fetch movie trailer
+const fetchTrailer = async (id) => {
+  const url = constructUrl(`movie/${id}/videos`);
+  const res = await fetch(url);
+  return res.json();
+};
+const trailersList = async (id) => {
+  const videos = await fetchTrailer(id);
+  renderTrailer(videos.results[0], id);
+};
+const renderTrailer = (trailer, id) => {
+  const trailerContainer = document.getElementById(`trailer${id}`);
+  const iframe = document.createElement("iframe");
+  iframe.setAttribute("width", "560px");
+  iframe.setAttribute("height", "315px");
+  iframe.setAttribute("src", `${youtubeBaseUrl + trailer.key}`);
+
+  iframe.setAttribute("frameborder", "0");
+  trailerContainer.appendChild(iframe);
+};
+//! ends here
 // FETCH GENRES AND IMPLEMENT THE FILTERING BASED ON GENDER
 const fetchGenresName = async () => {
   const url = constructUrl(`genre/movie/list`);
@@ -383,10 +445,14 @@ const renderActors = (actors) => {
 //render Single Actor Function
 const renderActor = (actor, movieCredits) => {
   CONTAINER.innerHTML = `
-  <h1 class="text-center text-4xl pt-3 pb-8" id="actor-name"><b>${actor.name}</b> </h1>
+  <h1 class="text-center text-4xl pt-3 pb-8" id="actor-name"><b>${
+    actor.name
+  }</b> </h1>
 <div class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:px-20 bg-white text-black mx-auto">
     <div class= "mx-auto">
-        <img id="actor-backdrop"  src=${PROFILE_BASE_URL + actor.profile_path} alt="${actor.name}">
+        <img id="actor-backdrop"  src=${
+          PROFILE_BASE_URL + actor.profile_path
+        } alt="${actor.name}">
     </diV>
 
    <div class=" bg-white text-black w-full mx-auto px-2 pt-4 md:pt-0">
