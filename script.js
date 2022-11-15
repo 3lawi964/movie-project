@@ -206,8 +206,11 @@ const renderMovie = (movie, credits, similarMovies) => {
                   <li><a href="/">* ${credits.cast[4].name} </a></li>
               </ul>
           </div>
-
-      </div>    
+          
+      </div> 
+      <div class="movie-trailer pt-10 w-full text-center mx-auto" id="trailer${
+        movie.id
+      }">   
     </div>
 
       <div id="Related-Movies-Section class="text-center mx-auto px-3">
@@ -263,11 +266,6 @@ const renderMovie = (movie, credits, similarMovies) => {
              </div>
          </div>
       </div>
-          
-      <div class="movie-trailer pt-10 w-full text-center mx-auto" id="trailer${
-        movie.id
-      }">
-      
       </div>
 
   `;
