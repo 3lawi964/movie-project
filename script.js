@@ -218,7 +218,7 @@ const renderMovie = (movie, credits, similarMovies) => {
           <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-3 mx-auto">
              <div class="w-52">
                   <img src=${
-                    BACKDROP_BASE_URL + similarMovResults[0].backdrop_path
+                    BACKDROP_BASE_URL + similarMovResults[0].poster_path
                   }>
                   <p class="pt-2 text-center"><b>${
                     similarMovResults[0].title
@@ -226,7 +226,7 @@ const renderMovie = (movie, credits, similarMovies) => {
              </div>
              <div class="w-52">
                   <img src=${
-                    BACKDROP_BASE_URL + similarMovResults[1].backdrop_path
+                    BACKDROP_BASE_URL + similarMovResults[1].poster_path
                   }>
                   <p class="pt-2 text-center"><b>${
                     similarMovResults[1].title
@@ -234,7 +234,7 @@ const renderMovie = (movie, credits, similarMovies) => {
              </div>
              <div class="w-52">
                   <img src=${
-                    BACKDROP_BASE_URL + similarMovResults[2].backdrop_path
+                    BACKDROP_BASE_URL + similarMovResults[2].poster_path
                   }>
                   <p class="pt-2 text-center"><b>${
                     similarMovResults[2].title
@@ -242,7 +242,7 @@ const renderMovie = (movie, credits, similarMovies) => {
              </div>
              <div class="w-52">
                   <img src=${
-                    BACKDROP_BASE_URL + similarMovResults[3].backdrop_path
+                    BACKDROP_BASE_URL + similarMovResults[3].poster_path
                   }>
                   <p class="pt-2 text-center"><b>${
                     similarMovResults[3].title
@@ -250,7 +250,7 @@ const renderMovie = (movie, credits, similarMovies) => {
              </div>
              <div class="w-52">
                   <img src=${
-                    BACKDROP_BASE_URL + similarMovResults[4].backdrop_path
+                    BACKDROP_BASE_URL + similarMovResults[4].poster_path
                   }>
                   <p class="pt-2 text-center"><b>${
                     similarMovResults[4].title
@@ -258,7 +258,7 @@ const renderMovie = (movie, credits, similarMovies) => {
              </div>
              <div class="w-52">
                   <img src=${
-                    BACKDROP_BASE_URL + similarMovResults[5].backdrop_path
+                    BACKDROP_BASE_URL + similarMovResults[5].poster_path
                   }>
                   <p class="pt-2 text-center"><b>${
                     similarMovResults[5].title
