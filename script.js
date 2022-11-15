@@ -168,74 +168,107 @@ const renderMovies = (movies) => {
 
 // You'll need to play with this function in order to add features and enhance the style.
 const renderMovie = (movie, credits, similarMovies) => {
-  CONTAINER.innerHTML = `
-    <div class="row bg-black text-white mx-auto w-full">
-        <div class="col-md-4">
-             <img id="movie-backdrop" src=${
-               BACKDROP_BASE_URL + movie.backdrop_path
-             }>
-        </div>
-        <div class="col-md-8 bg-black text-white w-full">
-            <h2 id="movie-title">${movie.title}</h2>
-            <p id="movie-release-date"><b>Release Date:</b> ${
-              movie.release_date
-            }</p>
+  console.log(similarMovies)
+
+  //To get the Director's Name
+  const name = []
+
+  const names = credits.crew.map(eachCrewObject => {
+       if(eachCrewObject.known_for_department === "Directing"){
+           name.push(eachCrewObject.name) 
+          }   
+      return name     
+  })
+  
+  const directorsname = name[0]
+
+  //To get the movie's Genres
+
+  let movieGenres = movie.genres
+  const movieArrayGenre = []
+
+  movieGenres.map( eachGenreElement =>{
+      movieArrayGenre.push(eachGenreElement.id)
+  })
+
+
+  //To Get similar Movies 
+  // if Similar Movies genres include MovieArrayGenre then need the title and image 
+  const similarMovResults = similarMovies.results
+  
+  console.log(similarMovResults)
+
+CONTAINER.innerHTML = `
+      <h1 class="text-center text-4xl pt-3 pb-8" id="movie-title"><b>${movie.title}</b></h1>
+      <div class="grid grid-cols-3 lg:flex bg-white text-black mx-auto w-full">
+         <div class="col-md-4">
+           <img id="movie-backdrop" src=${BACKDROP_BASE_URL + movie.backdrop_path}>
+          </div>
+
+          <div class=" bg-white text-black w-full px-3">
+            <p id="movie-release-date"><b>Release Date:</b> ${movie.release_date}</p>
             <p id="movie-runtime"><b>Runtime:</b> ${movie.runtime} Minutes</p>
+            <p id="movie-language"><b>Movie's Language:</b> ${movie.original_language}</p>
+            <p id="movie-rating"> <b>Movie Ratings </b>  ${movie.vote_average} </p>
+            <p id="recieved-votes"> <b> Recieved Votes: </b> ${movie.vote_count} votes</p>
+            <p id="director-name"> <b>Director's Name</b> ${directorsname} </p>
             <h3 class="pt-6"><b>Overview:</b></h3>
             <p id="movie-overview">${movie.overview}</p>
-        </div>
-        
-            <h3>Actors:</h3>
-            <ul id="actors" class="list-unstyled">
-                <li><a href="/"> ${credits.cast[0].name} </a></li>
-                <li><a href="/"> ${credits.cast[1].name} </a></li>
-                <li><a href="/"> ${credits.cast[2].name} </a></li>
-                <li><a href="/"> ${credits.cast[3].name} </a></li>
-                <li><a href="/"> ${credits.cast[4].name} </a></li>
-            </ul>
+          </div>
+          
+          <div class=" w-full px-3">
+              <p id="production-company"><b>Production Company:</b> ${movie.production_companies[0].name}</p>
+              <img class="w-52 h-auto pt-2"id="production-company-logo" src=${BACKDROP_BASE_URL + movie.production_companies[0].logo_path}> 
+              <h3 class="pt-3"><b>5 Main Actors:</b></h3>
+              <ul class=" pt-2 list-unstyled">
+                  <li><a href="/">* ${credits.cast[0].name} </a></li>
+                  <li><a href="/">* ${credits.cast[1].name} </a></li>
+                  <li><a href="/">* ${credits.cast[2].name} </a></li>
+                  <li><a href="/">* ${credits.cast[3].name} </a></li>
+                  <li><a href="/">* ${credits.cast[4].name} </a></li>
+              </ul>
+          </div>
 
-            <div class="m-auto"> 
-            <p id="movie-language"><b>Movie Language:</b> ${
-              movie.original_language
-            }
-            </div>
-            
-            <div>
+      </div>    
 
 
+      <div id="Related-Movies-Section class="text-center mx-auto px-3">
+      <h3 class="py-6 px-3 text-2xl"><b>Related Movies:</b></h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 px-3 mx-auto">
+             <div class="w-52">
+                  <img src=${BACKDROP_BASE_URL + similarMovResults[0].backdrop_path}>
+                  <p class="pt-2 text-center"><b>${similarMovResults[0].title}</b></p>
+             </div>
+             <div class="w-52">
+                  <img src=${BACKDROP_BASE_URL + similarMovResults[1].backdrop_path}>
+                  <p class="pt-2 text-center"><b>${similarMovResults[1].title}</b></p>
+             </div>
+             <div class="w-52">
+                  <img src=${BACKDROP_BASE_URL + similarMovResults[2].backdrop_path}>
+                  <p class="pt-2 text-center"><b>${similarMovResults[2].title}</b></p>
+             </div>
+             <div class="w-52">
+                  <img src=${BACKDROP_BASE_URL + similarMovResults[3].backdrop_path}>
+                  <p class="pt-2 text-center"><b>${similarMovResults[3].title}</b></p>
+             </div>
+             <div class="w-52">
+                  <img src=${BACKDROP_BASE_URL + similarMovResults[4].backdrop_path}>
+                  <p class="pt-2 text-center"><b>${similarMovResults[4].title}</b></p>
+             </div>
+             <div class="w-52">
+                  <img src=${BACKDROP_BASE_URL + similarMovResults[5].backdrop_path}>
+                  <p class="pt-2 text-center"><b>${similarMovResults[5].title}</b></p>
+             </div>
+         </div>
+      </div>
+          
+      <div class="movie-trailer pt-10 w-full text-center mx-auto">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/d4m9WCxb-J8" title="YouTube video player" 
+      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      allowfullscreen></iframe>
+      </div>
 
-
-            <!-- make sure to delete code from line "187" to line "204" cuz it's keep throwing an error in the console -->
-            
-            
-            
-            
-            
-            <p id="production-company"><b>Production Company:</b> ${
-              movie.production_companies[0].name
-            }</p>
-            <img id="production-company-logo" src=${
-              BACKDROP_BASE_URL + movie.production_companies[0].logo_path
-            }>
-            </div>
-            
-        
-         <div class="movie-trailer pt-10 w-full text-center mx-auto">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/d4m9WCxb-J8" title="YouTube video player" 
-        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen></iframe>
-
-        <div class="pt-20">
-        <p id="director-name"> <b>Director's Name</b> ?? </p>
-        </div>
-
-        <div class="pt-20">
-        <p id="movie-rating"> <b>Movie Ratings </b>  ${movie.vote_average} </p>
-        <p id="recieved-votes"> <b> Recieved Votes: </b> ${
-          movie.vote_count
-        } votes</p>
-        </div>
-            </div>`;
+  `;
 };
 
 // FETCH GENRES AND IMPLEMENT THE FILTERING BASED ON GENDER
@@ -358,54 +391,34 @@ const renderActors = (actors) => {
 
 //render Single Actor Function
 const renderActor = (actor, movieCredits) => {
-  //console.log(actor, movieCredits)
-
   CONTAINER.innerHTML = `
-<div class="row bg-white text-black mx-auto w-full">
-   <div class="col-md-4">
-        <img id="actor-backdrop" src=${PROFILE_BASE_URL + actor.profile_path}>
-   </div>
+  <h1 class="text-center text-4xl pt-3 pb-8" id="actor-name"><b>${actor.name}</b> </h1>
+<div class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:px-20 bg-white text-black mx-auto">
+    <div class= "mx-auto">
+        <img id="actor-backdrop"  src=${PROFILE_BASE_URL + actor.profile_path} alt="${actor.name}">
+    </diV>
 
-   <div class="col-md-8 bg-white text-black w-full">
-       <h2 id="actor-name"><b>Name:</b> ${actor.name}</h2>
+   <div class=" bg-white text-black w-full mx-auto px-2 pt-4 md:pt-0">
        <p id="actor-gender"><b>Gender:</b> ${actor.gender}</p>
        <p id="actor-popularity"><b>Popularity:</b> ${actor.popularity} </p>
        <p id="actor-birthday"><b>Birthday:</b> ${actor.birthday} </p>
-       <p id="actor-deathday"><b>Deathday:</b> ${actor.deathday} </p>
+       <p id="actor-deathday">${actor.deathday}</p>
        <h3 class="pt-6"><b>Biography:</b></h3>
        <p id="actor-biography">${actor.biography}</p>
    </div>
    
-   <h3>List of Movies the Actor Participated in:</h3>
-   <ul id="list-of-movies-actor-participated-in" class="list-unstyled" >
-        <li> 
-           <a href="#"> ${movieCredits.cast[0].title}</a>
-        </li>
-           
-        <li> 
-           <a href="#"> ${movieCredits.cast[1].title}</a>
-        </li>
-           
-        <li> 
-           <a href="#"> ${movieCredits.cast[2].title} </a>
-        </li>
-           
-        <li> 
-           <a href="#">${movieCredits.cast[3].title} </a>
-        </li>
-           
-        <li> 
-           <a href="#"> ${movieCredits.cast[4].title}</a>
-        </li>
-
-        <li> 
-           <a href="#"> ${movieCredits.cast[5].title}</a>
-        </li>
-
-        <li> 
-          <a href="#"> ${movieCredits.cast[6].title}</a>
-         </li>
+   <div class="mx-auto pr-2 pt-4 md:pt-0 w-full lg:pl-5">
+   <h3><b>List of Movies the Actor Participated in:</b></h3>
+   <ul class="pt-2">
+        <li> ${movieCredits.cast[0].title}</li>
+        <li> ${movieCredits.cast[1].title}</li>  
+        <li> ${movieCredits.cast[2].title}</li>
+        <li> ${movieCredits.cast[3].title}</li>
+        <li> ${movieCredits.cast[4].title}</li>
+        <li> ${movieCredits.cast[5].title} </li>
+        <li> ${movieCredits.cast[6].title} </li>
     </ul> 
+   </div> 
 </div>`;
 };
 
