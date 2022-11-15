@@ -4,7 +4,7 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
 const CONTAINER = document.createElement("div");
-CONTAINER.classList.add("container");
+CONTAINER.classList.add("container", "mb-32");
 const selectedGenras = [];
 const mainContainer = document.querySelector(".mainContainer");
 mainContainer.appendChild(CONTAINER);
@@ -83,81 +83,43 @@ const renderMovies = (movies) => {
     "lg:px-20"
   );
   movies.forEach((movie) => {
-    //To Create genres' name for each movie based on genre_ids
-    const movieGenreIdArray = movie.genre_ids;
-    const genre = [];
-    movieGenreIdArray.map((eachMovieGenreId) => {
-      if (eachMovieGenreId === 27) {
-        genre.push("Horror");
-      } else if (eachMovieGenreId === 53) {
-        genre.push("Thriller");
-      } else if (eachMovieGenreId === 28) {
-        genre.push("Action");
-      } else if (eachMovieGenreId === 14) {
-        genre.push("Fantasy");
-      } else if (eachMovieGenreId === 878) {
-        genre.push("Science Fiction");
-      } else if (eachMovieGenreId === 9648) {
-        genre.push("Mystery");
-      } else if (eachMovieGenreId === 18) {
-        genre.push("Drama");
-      } else if (eachMovieGenreId === 12) {
-        genre.push("Adventure");
-      } else if (eachMovieGenreId === 80) {
-        genre.push("Crime");
-      } else if (eachMovieGenreId === 16) {
-        genre.push("Animation");
-      } else if (eachMovieGenreId === 36) {
-        genre.push("History");
-      } else if (eachMovieGenreId === 10752) {
-        genre.push("War");
-      } else if (eachMovieGenreId === 35) {
-        genre.push("Comedy");
-      } else if (eachMovieGenreId === 99) {
-        genre.push("Documentary");
-      } else if (eachMovieGenreId === 10751) {
-        genre.push("Family");
-      } else if (eachMovieGenreId === 10402) {
-        genre.push("Music");
-      } else if (eachMovieGenreId === 10749) {
-        genre.push("Romance");
-      } else if (eachMovieGenreId === 10770) {
-        genre.push("Tv Movie");
-      } else if (eachMovieGenreId === 37) {
-        genre.push("Western");
-      }
-      return genre;
-    });
-
+    genresDetailsItem(movie.genre_ids, movie.id);
     const movieDiv = document.createElement("div");
+    movieDiv.id = "movieCard";
     movieDiv.classList.add(
-      "movieContainer",
-      "shadow-md",
-      "rounded-lg",
-      "overflow-hidden",
-      "shadow-gray-300",
       "w-80",
-      "hover:shadow-gray-400",
-      "hover:shadow-lg"
+      "rounded-lg",
+      "shadow-md",
+      "shadow-gray-300",
+      "hover:shadow-lg",
+      "overflow-hidden",
+      "duration-3000",
+      "transition",
+      "relative"
     );
     movieDiv.innerHTML = `
-             <div class="image-container relative w-full ">
-                <img src="${BACKDROP_BASE_URL + movie.backdrop_path}" alt="${
+    <div class="relative overflow-hidden">
+    <div id="overview" class="absolute font-bold text-gray-90 bg-opacity-60 transition duration-3000 p-6 bg-gray-50 top-0 right-0 bottom-0 translate-y-full hover:translate-y-0 ">
+    Overview :<br>
+     ${movie.overview}</div>
+    <img src="${BACKDROP_BASE_URL + movie.poster_path}" alt"${
       movie.title
-    } poster class="home-movie-image opacity-100 block w-full h-auto transition ease-in duration-500">
-                <div class="middle transition ease-in duration-500 opacity-0 absolute -translate-y-2/4 -translate-x-2/4 text-justify w-72">
-                    <div class="textonimage bg-black text-white text-xs w-full p-3"><b>Rating:</b> ${
-                      movie.vote_average
-                    } <br><b>Genres:</b> ${genre} <br><b>Description:</b> ${
-      movie.overview
-    }</div>
-                </div>
-              </div>
-              <div class="flex justify-center items-center bg-gray-900 py-auto"><p class= " md:text-xl text-2xl font-bold font-mono  text-white h-20 md:h-28 lg:h-36 xl:h-28 m-auto p-3">${
-                movie.title
-              }</p></div>
+    } class="w-full">
+    </div>
+    
+    <div class="px-4 py-6 flex flex-col gap-4">
+    <div class="relative flex items-center justify-between font-bold">
+    <h3 class="text-xl">${movie.title}</h3>
+      <span id="vote" class="absolute -top-12 right-4 bg-gray-900 p-2 rounded-full text-${voteColor(
+        parseFloat(movie.vote_average).toFixed(1)
+      )}-500 shadow-xl shadow-${voteColor(
+      parseFloat(movie.vote_average).toFixed(1)
+    )}-300"><p>${parseFloat(movie.vote_average).toFixed(1)}</p></span>
+    </div>
+      <ul id=${movie.id} class="flex gap-4 items-center text-sm flex-wrap"></ul>
+    </div>
+    `;
 
-              `;
     movieDiv.addEventListener("click", () => {
       movieDetails(movie);
     });
@@ -270,7 +232,6 @@ CONTAINER.innerHTML = `
 
   `;
 };
-
 // FETCH GENRES AND IMPLEMENT THE FILTERING BASED ON GENDER
 const fetchGenresName = async () => {
   const url = constructUrl(`genre/movie/list`);
@@ -280,6 +241,36 @@ const fetchGenresName = async () => {
 const genresDetails = async () => {
   const genre = await fetchGenresName();
   renderGenres(genre.genres);
+};
+const genresDetailsItem = async (ids, movieId) => {
+  const genre = await fetchGenresName();
+  const res = fun(genre.genres, ids, movieId);
+  return res;
+};
+const fun = (path, id, movieId) => {
+  const arr = [];
+  const movie = document.getElementById(movieId);
+  path.forEach((ele) => {
+    const idArray = id;
+    for (let i = 0; i < idArray.length; i++) {
+      if (ele.id == idArray[i]) {
+        arr.push(ele.name);
+      }
+    }
+  });
+  arr.forEach((ele) => {
+    const li = document.createElement("li");
+    li.classList.add(
+      "px-2",
+      "py-1",
+      "bg-gray-900",
+      "text-gray-50",
+      "rounded-full",
+      "bg-opacity-50"
+    );
+    li.innerHTML = `${ele}`;
+    movie.appendChild(li);
+  });
 };
 const renderGenres = (genre) => {
   const listContainer = document.getElementById("genreList");
@@ -421,7 +412,17 @@ const renderActor = (actor, movieCredits) => {
    </div> 
 </div>`;
 };
-
+const voteColor = (vote) => {
+  if (vote >= 8.5) {
+    return `green`;
+  } else if (vote < 8.5 && vote >= 7) {
+    return `yellow`;
+  } else if (vote < 7 && vote >= 5) {
+    return `orange`;
+  } else {
+    return `red`;
+  }
+};
 const form = document.getElementById("searchForm");
 const searchInput = document.getElementById("simple-search");
 form.addEventListener("submit", (e) => {
@@ -446,6 +447,12 @@ document
   .addEventListener("click", () => autorun(`discover/movie`, release));
 document
   .getElementById("nowPlaying")
+  .addEventListener("click", () => autorun(`movie/now_playing`));
+document
+  .getElementById("home")
+  .addEventListener("click", () => autorun(`movie/now_playing`));
+document
+  .getElementById("logo")
   .addEventListener("click", () => autorun(`movie/now_playing`));
 document
   .getElementById("upComing")
