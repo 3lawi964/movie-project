@@ -4,7 +4,7 @@ const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const PROFILE_BASE_URL = "http://image.tmdb.org/t/p/w185";
 const BACKDROP_BASE_URL = "http://image.tmdb.org/t/p/w780";
 const CONTAINER = document.createElement("div");
-CONTAINER.classList.add("container");
+CONTAINER.classList.add("container", "mb-32");
 const selectedGenras = [];
 const mainContainer = document.querySelector(".mainContainer");
 mainContainer.appendChild(CONTAINER);
@@ -112,9 +112,9 @@ const renderMovies = (movies) => {
     <h3 class="text-xl">${movie.title}</h3>
       <span id="vote" class="absolute -top-12 right-4 bg-gray-900 p-2 rounded-full text-${voteColor(
         parseFloat(movie.vote_average).toFixed(1)
-      )}-500 shadow-xl shadow-indigo-200"><p>${parseFloat(
-      movie.vote_average
-    ).toFixed(1)}</p></span>
+      )}-500 shadow-xl shadow-${voteColor(
+      parseFloat(movie.vote_average).toFixed(1)
+    )}-300"><p>${parseFloat(movie.vote_average).toFixed(1)}</p></span>
     </div>
       <ul id=${movie.id} class="flex gap-4 items-center text-sm flex-wrap"></ul>
     </div>
@@ -434,6 +434,12 @@ document
   .addEventListener("click", () => autorun(`discover/movie`, release));
 document
   .getElementById("nowPlaying")
+  .addEventListener("click", () => autorun(`movie/now_playing`));
+document
+  .getElementById("home")
+  .addEventListener("click", () => autorun(`movie/now_playing`));
+document
+  .getElementById("logo")
   .addEventListener("click", () => autorun(`movie/now_playing`));
 document
   .getElementById("upComing")
