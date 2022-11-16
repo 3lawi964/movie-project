@@ -440,6 +440,26 @@ const renderActors = (actors) => {
   });
 };
 
+function getGender(actor){
+  let gender ="";
+  if(actor.gender === 0){
+      gender = "not known"
+  } else if (actor.gender === 1){
+    gender = "female"
+  } else{
+    gender ="male"
+  }   
+return gender
+}
+
+function deathDate(actor){
+  let date ="";
+  if(actor.deathday !== null){
+      date = `<b>Deathday:</b> ${actor.deathday} `
+  } 
+return date
+}
+
 //render Single Actor Function
 const renderActor = (actor, movieCredits) => {
   CONTAINER.innerHTML = `
@@ -454,10 +474,10 @@ const renderActor = (actor, movieCredits) => {
     </diV>
 
    <div class=" bg-white text-black w-full mx-auto px-2 pt-4 md:pt-0">
-       <p id="actor-gender"><b>Gender:</b> ${actor.gender}</p>
+       <p id="actor-gender"><b>Gender:</b> ${getGender(actor)}</p>
        <p id="actor-popularity"><b>Popularity:</b> ${actor.popularity} </p>
        <p id="actor-birthday"><b>Birthday:</b> ${actor.birthday} </p>
-       <p id="actor-deathday">${actor.deathday}</p>
+       <p id="actor-deathday">${deathDate(actor)}</p>
        <h3 class="pt-6"><b>Biography:</b></h3>
        <p id="actor-biography">${actor.biography}</p>
    </div>
